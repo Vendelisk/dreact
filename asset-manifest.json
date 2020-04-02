@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/dreact/static/css/main.e2cb07ad.chunk.css",
+    "main.js": "/dreact/static/js/main.08bc813c.chunk.js",
+    "main.js.map": "/dreact/static/js/main.08bc813c.chunk.js.map",
+    "runtime-main.js": "/dreact/static/js/runtime-main.df64caed.js",
+    "runtime-main.js.map": "/dreact/static/js/runtime-main.df64caed.js.map",
+    "static/js/2.e8ffb9d6.chunk.js": "/dreact/static/js/2.e8ffb9d6.chunk.js",
+    "static/js/2.e8ffb9d6.chunk.js.map": "/dreact/static/js/2.e8ffb9d6.chunk.js.map",
+    "index.html": "/dreact/index.html",
+    "precache-manifest.5a8e877212e033978feeaf8fbc50ea48.js": "/dreact/precache-manifest.5a8e877212e033978feeaf8fbc50ea48.js",
+    "service-worker.js": "/dreact/service-worker.js",
+    "static/css/main.e2cb07ad.chunk.css.map": "/dreact/static/css/main.e2cb07ad.chunk.css.map",
+    "static/js/2.e8ffb9d6.chunk.js.LICENSE.txt": "/dreact/static/js/2.e8ffb9d6.chunk.js.LICENSE.txt",
+    "static/media/0_19D1CH1d.wav": "/dreact/static/media/0_19D1CH1d.ccd301fe.wav",
+    "static/media/1_Shkprc (2).wav": "/dreact/static/media/1_Shkprc (2).c72bd2d1.wav",
+    "static/media/2_Shkprc (24).wav": "/dreact/static/media/2_Shkprc (24).f43701ca.wav",
+    "static/media/3_808 Lo Toms.wav": "/dreact/static/media/3_808 Lo Toms.e486c268.wav",
+    "static/media/4_DrSnare42.wav": "/dreact/static/media/4_DrSnare42.3b087db5.wav",
+    "static/media/5_Clk_Snp.wav": "/dreact/static/media/5_Clk_Snp.306673aa.wav",
+    "static/media/6_IDSK3.wav": "/dreact/static/media/6_IDSK3.5c482dac.wav",
+    "static/media/7_WildKL01.wav": "/dreact/static/media/7_WildKL01.c2b4b816.wav",
+    "static/media/8_Wrd_Cyt2.wav": "/dreact/static/media/8_Wrd_Cyt2.718bf968.wav",
+    "static/media/9_Wrd_Cyt1.wav": "/dreact/static/media/9_Wrd_Cyt1.dbeb4c4e.wav"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.df64caed.js",
+    "static/js/2.e8ffb9d6.chunk.js",
+    "static/css/main.e2cb07ad.chunk.css",
+    "static/js/main.08bc813c.chunk.js"
+  ]
+}
