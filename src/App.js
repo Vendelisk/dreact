@@ -1,11 +1,18 @@
 // ReactDOMServer.renderToString(thing_to_render) will greatly improve page load times.
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import Tone from 'tone';
+import Nexus from 'nexusui';
+import { Button, Toggle, Dial, Number, Position, Slider, Envelope, Multislider, Piano, RadioButton, Select, Sequencer, TextButton, Tilt, Pan, Pan2D } from 'react-nexusui';
 
 function importAll(r) {
   return r.keys().map(r);
 }
+
+const letterButtons = ['q','w','e','a','s','d','z','x','c'];
+Nexus.colors.accent = "blue";
+Nexus.colors.fill = "black";
 
 // cannot wrap this in a function -- handled compile-time, not run-time
 const samplesArr = {'1' : importAll(require.context('./Audio', false, /\.wav$/i))};
@@ -14,6 +21,14 @@ samplesArr['3'] = importAll(require.context('./Audio3', false, /\.wav$/i));
 // samplesArr['4'] = importAll(require.context('./Audio4', false, /\.wav$/i));
 
 let key = '1';
+// var samples = samplesArr[key];
+// var player = new Tone.Player(samples[0]).toMaster();
+// Tone.Transport.loop = true;
+// var e = new Tone.Event(playNote(''), ["q","a","q","q","a"]);
+// //loop it every measure for 8 measures
+// e.start();
+// e.loop = 8;
+// e.loopEnd = "1m";
 
 function playNote(note) {
   var audio = new Audio();
@@ -23,6 +38,7 @@ function playNote(note) {
   switch(note) {
     case 'q': // hh
       audio.src = samples[0];
+      // player.start();
       break;
     case 'w': // misc
       audio.src = samples[1];
@@ -84,16 +100,6 @@ class DrumPad extends React.Component {
 };
 
 class DrumMachine extends React.Component {
-  componentDidMount() {
-    document.body.addEventListener('click', this.focuser);
-    this.focuser();
-  }
-
-  focuser() {
-    if(document.activeElement.tagName === "BODY")
-      document.getElementById('drum-pad-q').focus();
-  }
-
   render() {
     return (
       <div id="drum-machine" className="container">
@@ -117,33 +123,22 @@ class DrumMachine extends React.Component {
   }
 };
 
-// class Test extends React.Component {
-//   render() {
-//     var enumeratorPromise = navigator.mediaDevices.enumerateDevices();
-//     console.log(enumeratorPromise);
-//     return (
-//       <div />
-//     );
-//   }
-// }
-
 class AudioSwitch extends React.Component {
   constructor(props) {
     super(props);
-    this.dropSelect = this.dropSelect.bind(this);
+    this.newKey = this.newKey.bind(this);
   }
 
-  dropSelect(event) {
+  newKey(event) {
     // alert(event.target.options[event.target.selectedIndex].text);
     // alert(event.target.value);
     key = event.target.value;
-    document.getElementById('drum-pad-q').focus();
   }
 
   render() {
     return (
       <div className="container">
-        <select className="btn btn-secondary" onChange={this.dropSelect.bind(this)}>
+        <select className="btn btn-secondary" onChange={this.newKey.bind(this)}>
           <option value='1'>PHAT Beats</option>
           <option value='2'>SYCK Beats</option>
           <option value='3'>DYRTY Beats</option>
@@ -154,6 +149,180 @@ class AudioSwitch extends React.Component {
   }
 };
 
+function PlayMeasure(notes) {
+  console.log(notes);
+  let LBlen = letterButtons.length - 1;
+  for(let i = 0; i < notes.length; i++) {
+    let inverse = LBlen - i;
+    if(notes[i] === 1) 
+      playNote(letterButtons[inverse]);
+  }
+}
+
+// returns tempo in milliseconds
+function TempoToMs(newTempo) {
+  return(60000 / newTempo)
+}
+
+function GetNote(inp) {
+  if(inp.state)
+    playNote(letterButtons[inp.row]);
+}
+
+// SequencerRef.current.start => smaller number is faster tempo
+function Recording() {
+  // state but in function instead of class
+  const [ms, setMs] = useState(500);
+  const [tempo, setTempo] = useState(120);
+
+  // componentDidMount but in function instead of class
+  // used here to append letters to the sequencer
+  useEffect(() => {
+    let boxes = document.querySelector('[id^="nexus-ui-sequencer-"]').firstElementChild.children;
+    let letterBoxes = [];
+    for(let i = 0; i < boxes.length; i++) {
+      if(boxes[i].style.left === "0px") {
+        letterBoxes.push(boxes[i].cloneNode(false));
+      }
+    }
+
+    let labels = document.querySelector('[id^="nexus-ui-sequencer-"]').firstElementChild.cloneNode(false);
+    labels.style.height = "auto";
+    labels.style.cursor = "auto";
+
+    for(let i = 0; i < letterBoxes.length; i++) {
+      letterBoxes[i].appendChild(document.createTextNode(letterButtons[i])); // add letters
+      letterBoxes[i].style.left = "-40px";
+      labels.appendChild(letterBoxes[i]); // build element
+    }
+
+    let insertPos = document.querySelector('[id^="nexus-ui-sequencer-"]');
+    insertPos.insertBefore(labels, insertPos.childNodes[0]);
+  });
+
+  // Sequencer Playback interactions
+  const sequencerRef = React.useRef(Nexus.Sequencer);
+  let seqRows = 9;
+  let seqCols = 12;
+  return (
+    <React.Fragment>
+      <Sequencer 
+        rows={seqRows}
+        columns={seqCols}
+        size={[seqCols*40, seqRows*40]}
+        onStep={PlayMeasure}
+        onChange={GetNote}
+        onReady={sequencer => (sequencerRef.current = sequencer)}
+      />
+
+      <div className="container">
+        <div className="row">
+          <button type="button" className="btn btn-success col-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              if(!sequencerRef.current.interval.on)
+                sequencerRef.current.start(ms);
+            }}><span className="fa fa-play" /></button>
+
+          <button type="button" className="btn btn-danger col-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              if(sequencerRef.current.interval.on)
+                sequencerRef.current.stop();
+            }}><span className="fa fa-stop" /></button>
+
+          <button type="button" className="btn btn-secondary col-1 offset-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              if(seqCols > 8) {
+                seqCols -= 1;
+                sequencerRef.current.columns = seqCols;
+                sequencerRef.current.resize(seqCols*40, seqRows*40);
+                sequencerRef.current.matrix.toggle.all();
+                sequencerRef.current.matrix.toggle.all();
+              }
+            }}><span className="fa fa-minus-circle" /></button>
+
+          <button type="button" className="btn btn-primary col-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              if(seqCols < 20) {
+                seqCols += 1;
+                sequencerRef.current.columns = seqCols;
+                sequencerRef.current.resize(seqCols*40, seqRows*40);
+                sequencerRef.current.matrix.toggle.all();
+                sequencerRef.current.matrix.toggle.all();
+              }
+            }}><span className="fa fa-plus-circle" /></button>
+
+          <button type="button" className="btn btn-danger col-1 offset-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              sequencerRef.current.matrix.populate.all(0);
+            }}><span className="fa fa-window-close" /></button>
+
+          <button type="button" className="btn btn-light col-1 offset-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              if(ms < 1000) {
+                setTempo(tempo-5)
+                setMs(TempoToMs(tempo));
+                sequencerRef.current.interval.ms(ms);
+              }
+            }}><span className="fa fa-fast-backward" /></button>
+
+          <button type="button" className="btn btn-light col-1" style={{marginRight: "2%"}} 
+            onClick={() => {
+              if(ms > 200) {
+                setTempo(tempo+5)
+                setMs(TempoToMs(tempo));
+                sequencerRef.current.interval.ms(ms);
+              }
+            }}><span className="fa fa-fast-forward" /></button>
+          </div>
+      </div>
+      <span>Tempo: {tempo}</span>
+    </React.Fragment>
+  );
+}
+
+class RecWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibility: false
+    };
+
+    this.toggleVisibility = this.toggleVisibility.bind(this);
+  }
+
+  toggleVisibility() {
+    this.setState(state => ({
+      visibility: !state.visibility
+    }));
+  }
+
+  render() {
+    if(this.state.visibility) {
+      return(
+        <div id="sequencer">
+          <button 
+          onClick={this.toggleVisibility.bind(this)} 
+          type="button" 
+          className="btn btn-success" 
+          style={{margin: "5%", transform: "rotate(270deg)"}}>
+            <span className="fa fa-play" />
+          </button>
+          <Recording show={this.state.visibility} />
+        </div>
+      );
+    }
+    else {
+      return(
+        <button 
+        onClick={this.toggleVisibility.bind(this)} 
+        type="button" 
+        className="btn btn-success" >
+          <span className="fa fa-play" style={{margin: "5%", transform: "rotate(90deg)"}} />Sequencer
+        </button>
+      );
+    }
+  }
+}
 
 function App() {
   return (
@@ -162,7 +331,7 @@ function App() {
         <div className="col-8 offset-2">
           <header className="app-title">
             <h1>DReact</h1>
-            <h6 style={{fontStyle: "italic"}}>Drum machine made with... React</h6>
+            <h6 style={{fontStyle: "italic"}}>React, Nexus & Tone in action</h6>
           </header>
         </div>
         <div className="col-auto">
@@ -170,7 +339,7 @@ function App() {
         </div>
       </div>
       <DrumMachine />
-      {/*<Test />*/}
+      <RecWrapper />
     </div>
   );
 }
