@@ -43,3 +43,7 @@
   text-shadow: 2px 2px black;
   font-family: "Lucida Console", Monaco, monospace;
 }
+
+.seq-btn {
+  margin-right: 2%;
+}

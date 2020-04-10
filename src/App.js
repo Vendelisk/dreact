@@ -11,6 +11,7 @@ function importAll(r) {
 }
 
 const letterButtons = ['q','w','e','a','s','d','z','x','c'];
+const soundProfiles = ['hh', 'fx', 'fx', 'mdBass', 'snare', 'fx', 'dpBass', 'fx', 'fx']
 Nexus.colors.accent = "blue";
 Nexus.colors.fill = "black";
 
@@ -150,7 +151,6 @@ class AudioSwitch extends React.Component {
 };
 
 function PlayMeasure(notes) {
-  console.log(notes);
   let LBlen = letterButtons.length - 1;
   for(let i = 0; i < notes.length; i++) {
     let inverse = LBlen - i;
@@ -164,9 +164,9 @@ function TempoToMs(newTempo) {
   return(60000 / newTempo)
 }
 
-function GetNote(inp) {
-  if(inp.state)
-    playNote(letterButtons[inp.row]);
+function GetNote(e) {
+  if(e.state)
+    playNote(letterButtons[e.row]);
 }
 
 // SequencerRef.current.start => smaller number is faster tempo
@@ -191,8 +191,12 @@ function Recording() {
     labels.style.cursor = "auto";
 
     for(let i = 0; i < letterBoxes.length; i++) {
-      letterBoxes[i].appendChild(document.createTextNode(letterButtons[i])); // add letters
-      letterBoxes[i].style.left = "-40px";
+      letterBoxes[i].appendChild(document.createTextNode(letterButtons[i] + ' (' + soundProfiles[i] + ')')); // add letters
+      letterBoxes[i].style.left = "-120px";
+      letterBoxes[i].style.overflow = "visible";
+      letterBoxes[i].style.textAlign = "right";
+      letterBoxes[i].style.whiteSpace = "nowrap";
+      letterBoxes[i].style.width = "120px";
       labels.appendChild(letterBoxes[i]); // build element
     }
 
@@ -212,51 +216,49 @@ function Recording() {
         size={[seqCols*40, seqRows*40]}
         onStep={PlayMeasure}
         onChange={GetNote}
-        onReady={sequencer => (sequencerRef.current = sequencer)}
+        onReady={sequencer => (sequencerRef.current = sequencer)} 
       />
 
       <div className="container">
         <div className="row">
-          <button type="button" className="btn btn-success col-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-success col-1 seq-btn" 
             onClick={() => {
               if(!sequencerRef.current.interval.on)
                 sequencerRef.current.start(ms);
             }}><span className="fa fa-play" /></button>
 
-          <button type="button" className="btn btn-danger col-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-danger col-1 seq-btn" 
             onClick={() => {
               if(sequencerRef.current.interval.on)
                 sequencerRef.current.stop();
             }}><span className="fa fa-stop" /></button>
 
-          <button type="button" className="btn btn-secondary col-1 offset-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-secondary col-1 offset-1 seq-btn" 
             onClick={() => {
               if(seqCols > 8) {
+                sequencerRef.current.matrix.populate.all(0);
                 seqCols -= 1;
                 sequencerRef.current.columns = seqCols;
                 sequencerRef.current.resize(seqCols*40, seqRows*40);
-                sequencerRef.current.matrix.toggle.all();
-                sequencerRef.current.matrix.toggle.all();
               }
             }}><span className="fa fa-minus-circle" /></button>
 
-          <button type="button" className="btn btn-primary col-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-primary col-1 seq-btn" 
             onClick={() => {
               if(seqCols < 20) {
+                sequencerRef.current.matrix.populate.all(0);
                 seqCols += 1;
                 sequencerRef.current.columns = seqCols;
                 sequencerRef.current.resize(seqCols*40, seqRows*40);
-                sequencerRef.current.matrix.toggle.all();
-                sequencerRef.current.matrix.toggle.all();
               }
             }}><span className="fa fa-plus-circle" /></button>
 
-          <button type="button" className="btn btn-danger col-1 offset-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-danger col-1 offset-1 seq-btn" 
             onClick={() => {
               sequencerRef.current.matrix.populate.all(0);
             }}><span className="fa fa-window-close" /></button>
 
-          <button type="button" className="btn btn-light col-1 offset-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-light col-1 offset-1 seq-btn" 
             onClick={() => {
               if(ms < 1000) {
                 setTempo(tempo-5)
@@ -265,7 +267,7 @@ function Recording() {
               }
             }}><span className="fa fa-fast-backward" /></button>
 
-          <button type="button" className="btn btn-light col-1" style={{marginRight: "2%"}} 
+          <button type="button" className="btn btn-light col-1 seq-btn" 
             onClick={() => {
               if(ms > 200) {
                 setTempo(tempo+5)
@@ -275,7 +277,7 @@ function Recording() {
             }}><span className="fa fa-fast-forward" /></button>
           </div>
       </div>
-      <span>Tempo: {tempo}</span>
+      <span>Tempo: {tempo}BPM</span>
     </React.Fragment>
   );
 }
@@ -307,7 +309,7 @@ class RecWrapper extends React.Component {
           style={{margin: "5%", transform: "rotate(270deg)"}}>
             <span className="fa fa-play" />
           </button>
-          <Recording show={this.state.visibility} />
+          <Recording />
         </div>
       );
     }
