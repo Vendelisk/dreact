@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/dreact/static/css/main.e2cb07ad.chunk.css",
-    "main.js": "/dreact/static/js/main.48bee695.chunk.js",
-    "main.js.map": "/dreact/static/js/main.48bee695.chunk.js.map",
+    "main.css": "/dreact/static/css/main.4b471f50.chunk.css",
+    "main.js": "/dreact/static/js/main.b9642d7f.chunk.js",
+    "main.js.map": "/dreact/static/js/main.b9642d7f.chunk.js.map",
     "runtime-main.js": "/dreact/static/js/runtime-main.df64caed.js",
     "runtime-main.js.map": "/dreact/static/js/runtime-main.df64caed.js.map",
     "static/js/2.76436d3c.chunk.js": "/dreact/static/js/2.76436d3c.chunk.js",
     "static/js/2.76436d3c.chunk.js.map": "/dreact/static/js/2.76436d3c.chunk.js.map",
     "index.html": "/dreact/index.html",
-    "precache-manifest.c29e5abd6b989d5b042128c7ff804ac8.js": "/dreact/precache-manifest.c29e5abd6b989d5b042128c7ff804ac8.js",
+    "precache-manifest.4d6f2b754bafb806001c974029394c1c.js": "/dreact/precache-manifest.4d6f2b754bafb806001c974029394c1c.js",
     "service-worker.js": "/dreact/service-worker.js",
-    "static/css/main.e2cb07ad.chunk.css.map": "/dreact/static/css/main.e2cb07ad.chunk.css.map",
+    "static/css/main.4b471f50.chunk.css.map": "/dreact/static/css/main.4b471f50.chunk.css.map",
     "static/js/2.76436d3c.chunk.js.LICENSE.txt": "/dreact/static/js/2.76436d3c.chunk.js.LICENSE.txt",
     "static/media/0_19D1CH1d.wav": "/dreact/static/media/0_19D1CH1d.ccd301fe.wav",
     "static/media/0_IDSKHD.wav": "/dreact/static/media/0_IDSKHD.aea5f8a4.wav",
@@ -44,7 +44,7 @@
   "entrypoints": [
     "static/js/runtime-main.df64caed.js",
     "static/js/2.76436d3c.chunk.js",
-    "static/css/main.e2cb07ad.chunk.css",
-    "static/js/main.48bee695.chunk.js"
+    "static/css/main.4b471f50.chunk.css",
+    "static/js/main.b9642d7f.chunk.js"
   ]
 }

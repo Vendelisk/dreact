@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5501b957c123f34f261fa243c2067b14",
+    "revision": "78270ab0fa92ac29a0f724dbaae79577",
     "url": "/dreact/index.html"
   },
   {
-    "revision": "79b9276263bb7f0b0b09",
-    "url": "/dreact/static/css/main.e2cb07ad.chunk.css"
+    "revision": "f331cb0cb86c1f63e37b",
+    "url": "/dreact/static/css/main.4b471f50.chunk.css"
   },
   {
     "revision": "8ee4063aa07e273ceb0d",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/dreact/static/js/2.76436d3c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "79b9276263bb7f0b0b09",
-    "url": "/dreact/static/js/main.48bee695.chunk.js"
+    "revision": "f331cb0cb86c1f63e37b",
+    "url": "/dreact/static/js/main.b9642d7f.chunk.js"
   },
   {
     "revision": "056bfefde73d9b3616dd",
