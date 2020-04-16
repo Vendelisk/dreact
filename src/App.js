@@ -1,17 +1,21 @@
 // ReactDOMServer.renderToString(thing_to_render) will greatly improve page load times.
 
-import React, { useState, useEffect, useRef } from 'react';
+// import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import Tone from 'tone';
+import './ToneSequencerUI.js';
+import TSL from './ToneSequencerLogic.js';
+// import Tone from 'tone';
 import Nexus from 'nexusui';
-import { Button, Toggle, Dial, Number, Position, Slider, Envelope, Multislider, Piano, RadioButton, Select, Sequencer, TextButton, Tilt, Pan, Pan2D } from 'react-nexusui';
+// import { Button, Toggle, Dial, Number, Position, Slider, Envelope, Multislider, Piano, RadioButton, Select, Sequencer, TextButton, Tilt, Pan, Pan2D } from 'react-nexusui';
+import { Sequencer } from 'react-nexusui';
 
 function importAll(r) {
   return r.keys().map(r);
 }
 
 const letterButtons = ['q','w','e','a','s','d','z','x','c'];
-const soundProfiles = ['hh', 'fx', 'fx', 'mdBass', 'snare', 'fx', 'dpBass', 'fx', 'fx']
+const soundProfiles = ['hh', 'fx', 'fx', 'mdBass', 'snare', 'fx', 'dpBass', 'fx', 'fx'];
 Nexus.colors.accent = "blue";
 Nexus.colors.fill = "black";
 
@@ -327,6 +331,11 @@ class RecWrapper extends React.Component {
 }
 
 function App() {
+  useEffect(() => {
+    let toneObj = new TSL();
+    document.getElementById('tone-transport').onclick = function(){toneObj.transport.start()}
+  });
+
   return (
     <div className="App App-header">
       <div className="row container-fluid">
@@ -342,6 +351,11 @@ function App() {
       </div>
       <DrumMachine />
       <RecWrapper />
+      {/*<tone-transport></tone-transport>*/}
+      <button id="tone-transport" className="btn btn-secondary">
+        <span className="fa fa-play" />
+      </button>
+      <tone-sequencer-ui highlight="-1"></tone-sequencer-ui>
     </div>
   );
 }
