@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "78270ab0fa92ac29a0f724dbaae79577",
+    "revision": "63c31eb467bb8a647f2a65d43e9f7cf8",
     "url": "/dreact/index.html"
   },
   {
